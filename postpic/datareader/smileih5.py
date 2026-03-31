@@ -128,7 +128,17 @@ class SmileiReader(OpenPMDreader):
         else:
             self._iteration = int(iteration)
 
-        self._data = self._h5['/data/{:010d}/'.format(self._iteration)]
+        # Try different iteration key formats to support both Fields (837) and TrackParticles (0000000837)
+        data_keys = list(self._h5["data"].keys())
+        iteration_key = None
+        for key in data_keys:
+            if int(key) == self._iteration:
+                iteration_key = key
+                break
+        if iteration_key is None:
+            raise IOError("Iteration {} not found in data".format(self._iteration))
+
+        self._data = self._h5["/data/{}/".format(iteration_key)]
         self.attrs = self._data.attrs
 
     @staticmethod
