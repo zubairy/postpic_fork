@@ -575,7 +575,7 @@ class Field(NDArrayOperatorsMixin):
 
         if 'axes' in kwargs:
             if len(kwargs['axes']) < len(self._matrix.shape):
-                raise ValueError("Number of supplied axis to small")
+                raise ValueError("Number of supplied axis too small")
             self.axes = [None] * len(self.matrix.shape)
             for i, ax in enumerate(kwargs['axes']):
                 self.setaxisobj(i, ax)
